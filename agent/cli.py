@@ -4,6 +4,7 @@ from pathlib import Path
 from rich.console import Console
 from rich.table import Table
 from .core import Agent
+from . import mcp
 
 console = Console()
 
@@ -31,6 +32,7 @@ def init(ctx):
         console.print(f"Test framework: {result['test_framework'] or 'none detected'}")
         console.print(f"Files: {result['file_count']}")
         console.print(f"Git: {'yes' if result['has_git'] else 'no'}")
+        console.print(f"MCP servers: {result.get('mcp_servers', 0)}")
     else:
         console.print(f"[red]Error: {result['error']}[/red]")
 
@@ -160,6 +162,116 @@ def validate(ctx):
         console.print("\n[green]Validation passed![/green]")
     else:
         console.print("\n[red]Validation failed[/red]")
+
+# MCP commands
+@main.group("mcp")
+@click.pass_context
+def mcp_group(ctx):
+    """Manage MCP servers."""
+    pass
+
+@mcp_group.command("list")
+@click.pass_context
+def mcp_list(ctx):
+    """List all MCP servers."""
+    agent = ctx.obj["agent"]
+    servers = mcp.list_mcp_servers(agent.project_path)
+
+    if not servers:
+        console.print("[yellow]No MCP servers configured[/yellow]")
+        return
+
+    table = Table(title="MCP Servers")
+    table.add_column("Name")
+    table.add_column("Command")
+    table.add_column("Source")
+
+    for name, info in servers.items():
+        cmd = info["config"].get("command", "")
+        args = " ".join(info["config"].get("args", []))
+        source = info["source"]
+        source_color = {"agent": "green", "project": "blue", "global": "dim"}.get(source, "white")
+        table.add_row(name, f"{cmd} {args}"[:40], f"[{source_color}]{source}[/{source_color}]")
+
+    console.print(table)
+
+@mcp_group.command("add")
+@click.argument("name")
+@click.argument("package")
+@click.option("--env", "-e", multiple=True, help="Environment var (KEY=VALUE)")
+@click.pass_context
+def mcp_add(ctx, name, package, env):
+    """Add MCP server.
+
+    Examples:
+        agent mcp add fs @anthropic/mcp-server-filesystem
+        agent mcp add github @anthropic/mcp-server-github -e GITHUB_TOKEN=xxx
+    """
+    agent = ctx.obj["agent"]
+
+    # Parse package to command/args
+    command, args = mcp.parse_package_to_command(package)
+
+    # Parse env vars
+    env_dict = {}
+    for e in env:
+        if "=" in e:
+            k, v = e.split("=", 1)
+            env_dict[k] = v
+
+    mcp.add_mcp_server(name, command, args, env_dict or None, agent.project_path)
+    console.print(f"[green]Added MCP server: {name}[/green]")
+
+@mcp_group.command("remove")
+@click.argument("name")
+@click.pass_context
+def mcp_remove(ctx, name):
+    """Remove MCP server from agent config."""
+    agent = ctx.obj["agent"]
+
+    if mcp.remove_mcp_server(name, agent.project_path):
+        console.print(f"[green]Removed: {name}[/green]")
+    else:
+        console.print(f"[yellow]Not found in agent config: {name}[/yellow]")
+
+@mcp_group.command("test")
+@click.argument("name")
+@click.pass_context
+def mcp_test(ctx, name):
+    """Test MCP server connection."""
+    agent = ctx.obj["agent"]
+    servers = mcp.get_merged_mcp_config(agent.project_path)
+
+    if name not in servers:
+        console.print(f"[red]Server not found: {name}[/red]")
+        return
+
+    config = servers[name]
+    cmd = config.get("command")
+    args = config.get("args", [])
+
+    console.print(f"Testing {name}...")
+    console.print(f"  Command: {cmd} {' '.join(args)}")
+
+    # Try to run with --help or version
+    import subprocess
+    try:
+        result = subprocess.run(
+            [cmd] + args + ["--help"],
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+        if result.returncode == 0:
+            console.print(f"[green]Server appears valid[/green]")
+        else:
+            console.print(f"[yellow]Server responded with error[/yellow]")
+    except FileNotFoundError:
+        console.print(f"[red]Command not found: {cmd}[/red]")
+    except subprocess.TimeoutExpired:
+        console.print(f"[yellow]Server started (timeout waiting for response)[/yellow]")
+    except Exception as e:
+        console.print(f"[red]Error: {e}[/red]")
 
 if __name__ == "__main__":
     main()

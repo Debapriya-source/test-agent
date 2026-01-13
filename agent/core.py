@@ -1,6 +1,6 @@
 """Core agent orchestration."""
 from pathlib import Path
-from . import db, knowledge
+from . import db, knowledge, mcp
 from .subagents import PlannerAgent, ExecutorAgent, ReviewerAgent
 from .claude_bridge import check_claude_available
 
@@ -25,13 +25,20 @@ class Agent:
         # Scan and store knowledge
         result = knowledge.init_project(self.project_path)
 
+        # Init MCP config
+        mcp.init_mcp_config(self.project_path)
+
+        # Count inherited MCP servers
+        mcp_servers = mcp.list_mcp_servers(self.project_path)
+
         return {
             "success": True,
             "languages": result.get("languages", []),
             "frameworks": result.get("frameworks", []),
             "test_framework": result.get("test_framework"),
             "file_count": len(result.get("files", [])),
-            "has_git": result.get("has_git", False)
+            "has_git": result.get("has_git", False),
+            "mcp_servers": len(mcp_servers)
         }
 
     def plan(self, file_path: str = None, interactive: bool = False) -> dict:

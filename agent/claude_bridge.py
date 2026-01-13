@@ -1,15 +1,35 @@
 """Claude Code CLI bridge."""
 import subprocess
 import json
+import os
 from pathlib import Path
+from . import mcp
 
-def run_claude(prompt: str, cwd: Path = None, timeout: int = 300) -> dict:
-    """Run Claude Code CLI with prompt."""
+def run_claude(prompt: str, cwd: Path = None, timeout: int = 300,
+               use_mcp: bool = True) -> dict:
+    """Run Claude Code CLI with prompt.
+
+    Args:
+        prompt: The prompt to send
+        cwd: Working directory
+        timeout: Timeout in seconds
+        use_mcp: Whether to include MCP config
+    """
     cwd = cwd or Path.cwd()
+    temp_config = None
 
     try:
+        cmd = ["claude", "-p", prompt, "--output-format", "json"]
+
+        # Add MCP config if available
+        if use_mcp:
+            merged = mcp.get_merged_mcp_config(cwd)
+            if merged:
+                temp_config = mcp.write_merged_config_temp(cwd)
+                cmd.extend(["--mcp-config", str(temp_config)])
+
         result = subprocess.run(
-            ["claude", "-p", prompt, "--output-format", "json"],
+            cmd,
             cwd=str(cwd),
             capture_output=True,
             text=True,
@@ -30,22 +50,42 @@ def run_claude(prompt: str, cwd: Path = None, timeout: int = 300) -> dict:
         return {"success": False, "error": "Claude CLI not found. Install with: npm install -g @anthropic/claude-code"}
     except Exception as e:
         return {"success": False, "error": str(e)}
+    finally:
+        # Cleanup temp file
+        if temp_config and temp_config.exists():
+            try:
+                os.unlink(temp_config)
+            except:
+                pass
 
-def run_claude_interactive(prompt: str, cwd: Path = None) -> dict:
-    """Run Claude Code in interactive mode (for user interaction)."""
+def run_claude_interactive(prompt: str, cwd: Path = None,
+                           use_mcp: bool = True) -> dict:
+    """Run Claude Code in interactive mode."""
     cwd = cwd or Path.cwd()
+    temp_config = None
 
     try:
-        # Run in foreground for user interaction
-        result = subprocess.run(
-            ["claude", prompt],
-            cwd=str(cwd),
-        )
+        cmd = ["claude", prompt]
+
+        # Add MCP config if available
+        if use_mcp:
+            merged = mcp.get_merged_mcp_config(cwd)
+            if merged:
+                temp_config = mcp.write_merged_config_temp(cwd)
+                cmd.extend(["--mcp-config", str(temp_config)])
+
+        result = subprocess.run(cmd, cwd=str(cwd))
         return {"success": result.returncode == 0}
     except FileNotFoundError:
         return {"success": False, "error": "Claude CLI not found"}
     except Exception as e:
         return {"success": False, "error": str(e)}
+    finally:
+        if temp_config and temp_config.exists():
+            try:
+                os.unlink(temp_config)
+            except:
+                pass
 
 def check_claude_available() -> bool:
     """Check if Claude CLI is available."""
@@ -54,3 +94,11 @@ def check_claude_available() -> bool:
         return result.returncode == 0
     except:
         return False
+
+def get_mcp_status(cwd: Path = None) -> dict:
+    """Get MCP configuration status."""
+    servers = mcp.list_mcp_servers(cwd)
+    return {
+        "server_count": len(servers),
+        "servers": servers
+    }
