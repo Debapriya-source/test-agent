@@ -64,15 +64,41 @@ Default servers (always configured on init):
 - `playwright` - Browser automation (Docker)
 - `claude-code-sdk` - Claude Code SDK for agents
 
-Available stacks: postgres, mysql, mongodb, redis, sqlite, github, gitlab, aws, gcp, slack, notion, linear, filesystem, s3, docker, kubernetes, openai, memory, fetch, sentry, etc.
+Available stacks (90+):
+- **Databases**: postgres, mysql, mongodb, redis, sqlite, supabase, neon, planetscale, turso, upstash, neo4j
+- **Vector DBs**: qdrant, pinecone, weaviate, chroma, milvus
+- **Git/DevOps**: github, gitlab, bitbucket, docker, kubernetes, terraform, pulumi
+- **Cloud**: aws, gcp, azure, cloudflare, vercel, netlify, fly, railway, render
+- **AI/ML**: openai, anthropic, groq, mistral, cohere, replicate, huggingface, together, perplexity
+- **Search**: algolia, typesense, meilisearch, elasticsearch, tavily, exa, serper, brave-search
+- **Comms**: slack, discord, telegram, teams, twilio
+- **Productivity**: notion, linear, jira, asana, trello, monday, clickup, todoist, confluence
+- **Email**: sendgrid, resend, mailgun, postmark
+- **Payments**: stripe, paypal, shopify
+- **Auth**: auth0, clerk, firebase
+- **Analytics**: segment, mixpanel, amplitude, posthog, datadog, newrelic, grafana, sentry
+- **CMS**: contentful, sanity, strapi
+- **CRM**: hubspot, salesforce
+- **Data**: snowflake, bigquery, databricks, airtable, google-sheets
+- **Scraping**: firecrawl, browserbase, apify
+- **Code**: e2b, modal
+- **Secrets**: vault, doppler
+- **Queues**: rabbitmq, kafka
+- **Misc**: memory, fetch, time, git, sequential-thinking, zapier, make
 
 Presets:
-- `web-basic` - fetch, memory, github
-- `fullstack-postgres` - fetch, memory, github, postgres, docker
-- `fullstack-mongo` - fetch, memory, github, mongodb, docker
-- `data-science` - memory, postgres, s3, qdrant
-- `devops` - github, docker, kubernetes, aws, sentry
-- `ai-agent` - memory, fetch, openai, qdrant, github
+- `web-basic` - fetch, memory, github, git
+- `fullstack-postgres` - fetch, memory, github, postgres, docker, git
+- `fullstack-supabase` - fetch, memory, github, supabase, git
+- `serverless` - fetch, memory, github, vercel, neon, upstash, git
+- `ai-agent` - memory, fetch, openai, qdrant, github, e2b, firecrawl
+- `ai-search` - memory, fetch, tavily, exa, qdrant, openai
+- `saas` - github, supabase, stripe, resend, posthog, sentry
+- `startup` - github, vercel, supabase, stripe, resend, slack, linear
+- `enterprise` - github, jira, confluence, slack, datadog, vault
+- `devops` - github, docker, kubernetes, aws, sentry, terraform
+- `ecommerce` - github, shopify, stripe, sendgrid, algolia, segment
+- `ml-ops` - github, aws, s3, snowflake, databricks, huggingface
 
 Example:
 ```bash

@@ -44,6 +44,22 @@ TECH_STACK_SERVERS = {
             }
         },
     },
+    "supabase": {
+        "description": "Supabase (PostgreSQL, Auth, Storage, Edge Functions)",
+        "servers": {
+            "supabase": {
+                "command": "npx",
+                "args": ["-y", "@supabase/mcp-server-supabase@latest"],
+                "env": {
+                    "SUPABASE_ACCESS_TOKEN": {
+                        "description": "Supabase personal access token (from supabase.com/dashboard/account/tokens)",
+                        "example": "sbp_xxxxxxxxxxxx",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
     "sqlite": {
         "description": "SQLite database",
         "servers": {
@@ -670,33 +686,1727 @@ TECH_STACK_SERVERS = {
             }
         },
     },
+    "weaviate": {
+        "description": "Weaviate vector database",
+        "servers": {
+            "weaviate": {
+                "command": "npx",
+                "args": ["-y", "weaviate-mcp-server"],
+                "env": {
+                    "WEAVIATE_URL": {
+                        "description": "Weaviate instance URL",
+                        "example": "http://localhost:8080",
+                        "required": True,
+                    },
+                    "WEAVIATE_API_KEY": {
+                        "description": "Weaviate API key (if auth enabled)",
+                        "example": "",
+                        "required": False,
+                    },
+                },
+            }
+        },
+    },
+    "chroma": {
+        "description": "Chroma vector database",
+        "servers": {
+            "chroma": {
+                "command": "npx",
+                "args": ["-y", "chroma-mcp-server"],
+                "env": {
+                    "CHROMA_URL": {
+                        "description": "Chroma server URL",
+                        "example": "http://localhost:8000",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "milvus": {
+        "description": "Milvus vector database",
+        "servers": {
+            "milvus": {
+                "command": "npx",
+                "args": ["-y", "milvus-mcp-server"],
+                "env": {
+                    "MILVUS_URI": {
+                        "description": "Milvus connection URI",
+                        "example": "http://localhost:19530",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # Serverless Databases
+    "neon": {
+        "description": "Neon serverless PostgreSQL",
+        "servers": {
+            "neon": {
+                "command": "npx",
+                "args": ["-y", "@neondatabase/mcp-server-neon@latest"],
+                "env": {
+                    "NEON_API_KEY": {
+                        "description": "Neon API key",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "planetscale": {
+        "description": "PlanetScale serverless MySQL",
+        "servers": {
+            "planetscale": {
+                "command": "npx",
+                "args": ["-y", "planetscale-mcp-server"],
+                "env": {
+                    "PLANETSCALE_TOKEN": {
+                        "description": "PlanetScale service token",
+                        "example": "",
+                        "required": True,
+                    },
+                    "PLANETSCALE_ORG": {
+                        "description": "PlanetScale organization",
+                        "example": "my-org",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "turso": {
+        "description": "Turso edge SQLite database",
+        "servers": {
+            "turso": {
+                "command": "npx",
+                "args": ["-y", "turso-mcp-server"],
+                "env": {
+                    "TURSO_DATABASE_URL": {
+                        "description": "Turso database URL",
+                        "example": "libsql://db-org.turso.io",
+                        "required": True,
+                    },
+                    "TURSO_AUTH_TOKEN": {
+                        "description": "Turso auth token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "upstash": {
+        "description": "Upstash serverless Redis & Kafka",
+        "servers": {
+            "upstash": {
+                "command": "npx",
+                "args": ["-y", "@upstash/mcp-server"],
+                "env": {
+                    "UPSTASH_EMAIL": {
+                        "description": "Upstash account email",
+                        "example": "user@example.com",
+                        "required": True,
+                    },
+                    "UPSTASH_API_KEY": {
+                        "description": "Upstash API key",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # Payments
+    "stripe": {
+        "description": "Stripe payments",
+        "servers": {
+            "stripe": {
+                "command": "npx",
+                "args": ["-y", "@stripe/mcp-server"],
+                "env": {
+                    "STRIPE_SECRET_KEY": {
+                        "description": "Stripe secret API key",
+                        "example": "sk_test_xxxxxxxxxxxx",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "paypal": {
+        "description": "PayPal payments",
+        "servers": {
+            "paypal": {
+                "command": "npx",
+                "args": ["-y", "paypal-mcp-server"],
+                "env": {
+                    "PAYPAL_CLIENT_ID": {
+                        "description": "PayPal client ID",
+                        "example": "",
+                        "required": True,
+                    },
+                    "PAYPAL_CLIENT_SECRET": {
+                        "description": "PayPal client secret",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # Authentication
+    "auth0": {
+        "description": "Auth0 authentication",
+        "servers": {
+            "auth0": {
+                "command": "npx",
+                "args": ["-y", "auth0-mcp-server"],
+                "env": {
+                    "AUTH0_DOMAIN": {
+                        "description": "Auth0 domain",
+                        "example": "myapp.auth0.com",
+                        "required": True,
+                    },
+                    "AUTH0_CLIENT_ID": {
+                        "description": "Auth0 client ID",
+                        "example": "",
+                        "required": True,
+                    },
+                    "AUTH0_CLIENT_SECRET": {
+                        "description": "Auth0 client secret",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "clerk": {
+        "description": "Clerk authentication",
+        "servers": {
+            "clerk": {
+                "command": "npx",
+                "args": ["-y", "clerk-mcp-server"],
+                "env": {
+                    "CLERK_SECRET_KEY": {
+                        "description": "Clerk secret key",
+                        "example": "sk_test_xxxxxxxxxxxx",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "firebase": {
+        "description": "Firebase (Auth, Firestore, Storage)",
+        "servers": {
+            "firebase": {
+                "command": "npx",
+                "args": ["-y", "firebase-mcp-server"],
+                "env": {
+                    "FIREBASE_SERVICE_ACCOUNT": {
+                        "description": "Firebase service account JSON (base64 or path)",
+                        "example": "/path/to/service-account.json",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # Email Services
+    "sendgrid": {
+        "description": "SendGrid email service",
+        "servers": {
+            "sendgrid": {
+                "command": "npx",
+                "args": ["-y", "sendgrid-mcp-server"],
+                "env": {
+                    "SENDGRID_API_KEY": {
+                        "description": "SendGrid API key",
+                        "example": "SG.xxxxxxxxxxxx",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "resend": {
+        "description": "Resend email service",
+        "servers": {
+            "resend": {
+                "command": "npx",
+                "args": ["-y", "resend-mcp-server"],
+                "env": {
+                    "RESEND_API_KEY": {
+                        "description": "Resend API key",
+                        "example": "re_xxxxxxxxxxxx",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "mailgun": {
+        "description": "Mailgun email service",
+        "servers": {
+            "mailgun": {
+                "command": "npx",
+                "args": ["-y", "mailgun-mcp-server"],
+                "env": {
+                    "MAILGUN_API_KEY": {
+                        "description": "Mailgun API key",
+                        "example": "",
+                        "required": True,
+                    },
+                    "MAILGUN_DOMAIN": {
+                        "description": "Mailgun domain",
+                        "example": "mg.example.com",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "postmark": {
+        "description": "Postmark email service",
+        "servers": {
+            "postmark": {
+                "command": "npx",
+                "args": ["-y", "postmark-mcp-server"],
+                "env": {
+                    "POSTMARK_SERVER_TOKEN": {
+                        "description": "Postmark server token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # SMS & Communications
+    "twilio": {
+        "description": "Twilio SMS, Voice, Video",
+        "servers": {
+            "twilio": {
+                "command": "npx",
+                "args": ["-y", "@anthropics/twilio-mcp-server"],
+                "env": {
+                    "TWILIO_ACCOUNT_SID": {
+                        "description": "Twilio account SID",
+                        "example": "ACxxxxxxxxxxxx",
+                        "required": True,
+                    },
+                    "TWILIO_AUTH_TOKEN": {
+                        "description": "Twilio auth token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "discord": {
+        "description": "Discord messaging",
+        "servers": {
+            "discord": {
+                "command": "npx",
+                "args": ["-y", "discord-mcp-server"],
+                "env": {
+                    "DISCORD_BOT_TOKEN": {
+                        "description": "Discord bot token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "telegram": {
+        "description": "Telegram messaging",
+        "servers": {
+            "telegram": {
+                "command": "npx",
+                "args": ["-y", "telegram-mcp-server"],
+                "env": {
+                    "TELEGRAM_BOT_TOKEN": {
+                        "description": "Telegram bot token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "teams": {
+        "description": "Microsoft Teams",
+        "servers": {
+            "teams": {
+                "command": "npx",
+                "args": ["-y", "teams-mcp-server"],
+                "env": {
+                    "TEAMS_WEBHOOK_URL": {
+                        "description": "Teams webhook URL",
+                        "example": "https://outlook.office.com/webhook/...",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # Deployment & Hosting
+    "vercel": {
+        "description": "Vercel deployment",
+        "servers": {
+            "vercel": {
+                "command": "npx",
+                "args": ["-y", "vercel-mcp-server"],
+                "env": {
+                    "VERCEL_TOKEN": {
+                        "description": "Vercel API token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "netlify": {
+        "description": "Netlify deployment",
+        "servers": {
+            "netlify": {
+                "command": "npx",
+                "args": ["-y", "netlify-mcp-server"],
+                "env": {
+                    "NETLIFY_AUTH_TOKEN": {
+                        "description": "Netlify personal access token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "cloudflare": {
+        "description": "Cloudflare (Workers, Pages, R2, D1)",
+        "servers": {
+            "cloudflare": {
+                "command": "npx",
+                "args": ["-y", "@cloudflare/mcp-server-cloudflare"],
+                "env": {
+                    "CLOUDFLARE_API_TOKEN": {
+                        "description": "Cloudflare API token",
+                        "example": "",
+                        "required": True,
+                    },
+                    "CLOUDFLARE_ACCOUNT_ID": {
+                        "description": "Cloudflare account ID",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "fly": {
+        "description": "Fly.io deployment",
+        "servers": {
+            "fly": {
+                "command": "npx",
+                "args": ["-y", "fly-mcp-server"],
+                "env": {
+                    "FLY_API_TOKEN": {
+                        "description": "Fly.io API token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "railway": {
+        "description": "Railway deployment",
+        "servers": {
+            "railway": {
+                "command": "npx",
+                "args": ["-y", "railway-mcp-server"],
+                "env": {
+                    "RAILWAY_TOKEN": {
+                        "description": "Railway API token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "render": {
+        "description": "Render deployment",
+        "servers": {
+            "render": {
+                "command": "npx",
+                "args": ["-y", "render-mcp-server"],
+                "env": {
+                    "RENDER_API_KEY": {
+                        "description": "Render API key",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # Project Management
+    "jira": {
+        "description": "Jira issue tracking",
+        "servers": {
+            "jira": {
+                "command": "npx",
+                "args": ["-y", "jira-mcp-server"],
+                "env": {
+                    "JIRA_URL": {
+                        "description": "Jira instance URL",
+                        "example": "https://mycompany.atlassian.net",
+                        "required": True,
+                    },
+                    "JIRA_EMAIL": {
+                        "description": "Jira account email",
+                        "example": "user@example.com",
+                        "required": True,
+                    },
+                    "JIRA_API_TOKEN": {
+                        "description": "Jira API token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "asana": {
+        "description": "Asana project management",
+        "servers": {
+            "asana": {
+                "command": "npx",
+                "args": ["-y", "asana-mcp-server"],
+                "env": {
+                    "ASANA_ACCESS_TOKEN": {
+                        "description": "Asana personal access token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "trello": {
+        "description": "Trello boards",
+        "servers": {
+            "trello": {
+                "command": "npx",
+                "args": ["-y", "trello-mcp-server"],
+                "env": {
+                    "TRELLO_API_KEY": {
+                        "description": "Trello API key",
+                        "example": "",
+                        "required": True,
+                    },
+                    "TRELLO_TOKEN": {
+                        "description": "Trello token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "monday": {
+        "description": "Monday.com work management",
+        "servers": {
+            "monday": {
+                "command": "npx",
+                "args": ["-y", "monday-mcp-server"],
+                "env": {
+                    "MONDAY_API_TOKEN": {
+                        "description": "Monday.com API token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "clickup": {
+        "description": "ClickUp project management",
+        "servers": {
+            "clickup": {
+                "command": "npx",
+                "args": ["-y", "clickup-mcp-server"],
+                "env": {
+                    "CLICKUP_API_TOKEN": {
+                        "description": "ClickUp API token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "todoist": {
+        "description": "Todoist task management",
+        "servers": {
+            "todoist": {
+                "command": "npx",
+                "args": ["-y", "@anthropics/todoist-mcp-server"],
+                "env": {
+                    "TODOIST_API_TOKEN": {
+                        "description": "Todoist API token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # CMS & Content
+    "contentful": {
+        "description": "Contentful headless CMS",
+        "servers": {
+            "contentful": {
+                "command": "npx",
+                "args": ["-y", "contentful-mcp-server"],
+                "env": {
+                    "CONTENTFUL_SPACE_ID": {
+                        "description": "Contentful space ID",
+                        "example": "",
+                        "required": True,
+                    },
+                    "CONTENTFUL_ACCESS_TOKEN": {
+                        "description": "Contentful access token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "sanity": {
+        "description": "Sanity headless CMS",
+        "servers": {
+            "sanity": {
+                "command": "npx",
+                "args": ["-y", "sanity-mcp-server"],
+                "env": {
+                    "SANITY_PROJECT_ID": {
+                        "description": "Sanity project ID",
+                        "example": "",
+                        "required": True,
+                    },
+                    "SANITY_TOKEN": {
+                        "description": "Sanity API token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "strapi": {
+        "description": "Strapi headless CMS",
+        "servers": {
+            "strapi": {
+                "command": "npx",
+                "args": ["-y", "strapi-mcp-server"],
+                "env": {
+                    "STRAPI_URL": {
+                        "description": "Strapi instance URL",
+                        "example": "http://localhost:1337",
+                        "required": True,
+                    },
+                    "STRAPI_API_TOKEN": {
+                        "description": "Strapi API token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # Search Engines
+    "algolia": {
+        "description": "Algolia search",
+        "servers": {
+            "algolia": {
+                "command": "npx",
+                "args": ["-y", "algolia-mcp-server"],
+                "env": {
+                    "ALGOLIA_APP_ID": {
+                        "description": "Algolia application ID",
+                        "example": "",
+                        "required": True,
+                    },
+                    "ALGOLIA_API_KEY": {
+                        "description": "Algolia admin API key",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "typesense": {
+        "description": "Typesense search",
+        "servers": {
+            "typesense": {
+                "command": "npx",
+                "args": ["-y", "typesense-mcp-server"],
+                "env": {
+                    "TYPESENSE_HOST": {
+                        "description": "Typesense host",
+                        "example": "localhost",
+                        "required": True,
+                    },
+                    "TYPESENSE_API_KEY": {
+                        "description": "Typesense API key",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "meilisearch": {
+        "description": "Meilisearch search",
+        "servers": {
+            "meilisearch": {
+                "command": "npx",
+                "args": ["-y", "meilisearch-mcp-server"],
+                "env": {
+                    "MEILISEARCH_HOST": {
+                        "description": "Meilisearch host URL",
+                        "example": "http://localhost:7700",
+                        "required": True,
+                    },
+                    "MEILISEARCH_API_KEY": {
+                        "description": "Meilisearch master key",
+                        "example": "",
+                        "required": False,
+                    },
+                },
+            }
+        },
+    },
+    "elasticsearch": {
+        "description": "Elasticsearch search",
+        "servers": {
+            "elasticsearch": {
+                "command": "npx",
+                "args": ["-y", "elasticsearch-mcp-server"],
+                "env": {
+                    "ELASTICSEARCH_URL": {
+                        "description": "Elasticsearch URL",
+                        "example": "http://localhost:9200",
+                        "required": True,
+                    },
+                    "ELASTICSEARCH_API_KEY": {
+                        "description": "Elasticsearch API key",
+                        "example": "",
+                        "required": False,
+                    },
+                },
+            }
+        },
+    },
+    # Analytics & Monitoring
+    "segment": {
+        "description": "Segment analytics",
+        "servers": {
+            "segment": {
+                "command": "npx",
+                "args": ["-y", "segment-mcp-server"],
+                "env": {
+                    "SEGMENT_WRITE_KEY": {
+                        "description": "Segment write key",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "mixpanel": {
+        "description": "Mixpanel analytics",
+        "servers": {
+            "mixpanel": {
+                "command": "npx",
+                "args": ["-y", "mixpanel-mcp-server"],
+                "env": {
+                    "MIXPANEL_TOKEN": {
+                        "description": "Mixpanel project token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "amplitude": {
+        "description": "Amplitude analytics",
+        "servers": {
+            "amplitude": {
+                "command": "npx",
+                "args": ["-y", "amplitude-mcp-server"],
+                "env": {
+                    "AMPLITUDE_API_KEY": {
+                        "description": "Amplitude API key",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "posthog": {
+        "description": "PostHog product analytics",
+        "servers": {
+            "posthog": {
+                "command": "npx",
+                "args": ["-y", "posthog-mcp-server"],
+                "env": {
+                    "POSTHOG_API_KEY": {
+                        "description": "PostHog API key",
+                        "example": "phx_xxxxxxxxxxxx",
+                        "required": True,
+                    },
+                    "POSTHOG_HOST": {
+                        "description": "PostHog host URL",
+                        "example": "https://app.posthog.com",
+                        "required": False,
+                    },
+                },
+            }
+        },
+    },
+    "datadog": {
+        "description": "Datadog monitoring",
+        "servers": {
+            "datadog": {
+                "command": "npx",
+                "args": ["-y", "datadog-mcp-server"],
+                "env": {
+                    "DATADOG_API_KEY": {
+                        "description": "Datadog API key",
+                        "example": "",
+                        "required": True,
+                    },
+                    "DATADOG_APP_KEY": {
+                        "description": "Datadog application key",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "newrelic": {
+        "description": "New Relic observability",
+        "servers": {
+            "newrelic": {
+                "command": "npx",
+                "args": ["-y", "newrelic-mcp-server"],
+                "env": {
+                    "NEW_RELIC_API_KEY": {
+                        "description": "New Relic API key",
+                        "example": "",
+                        "required": True,
+                    },
+                    "NEW_RELIC_ACCOUNT_ID": {
+                        "description": "New Relic account ID",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "grafana": {
+        "description": "Grafana dashboards",
+        "servers": {
+            "grafana": {
+                "command": "npx",
+                "args": ["-y", "grafana-mcp-server"],
+                "env": {
+                    "GRAFANA_URL": {
+                        "description": "Grafana URL",
+                        "example": "http://localhost:3000",
+                        "required": True,
+                    },
+                    "GRAFANA_API_KEY": {
+                        "description": "Grafana API key",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "prometheus": {
+        "description": "Prometheus metrics",
+        "servers": {
+            "prometheus": {
+                "command": "npx",
+                "args": ["-y", "prometheus-mcp-server"],
+                "env": {
+                    "PROMETHEUS_URL": {
+                        "description": "Prometheus server URL",
+                        "example": "http://localhost:9090",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # E-commerce
+    "shopify": {
+        "description": "Shopify e-commerce",
+        "servers": {
+            "shopify": {
+                "command": "npx",
+                "args": ["-y", "@anthropics/shopify-mcp-server"],
+                "env": {
+                    "SHOPIFY_STORE_URL": {
+                        "description": "Shopify store URL",
+                        "example": "mystore.myshopify.com",
+                        "required": True,
+                    },
+                    "SHOPIFY_ACCESS_TOKEN": {
+                        "description": "Shopify admin API access token",
+                        "example": "shpat_xxxxxxxxxxxx",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # AI Models & Services
+    "anthropic": {
+        "description": "Anthropic Claude API",
+        "servers": {
+            "anthropic": {
+                "command": "npx",
+                "args": ["-y", "anthropic-mcp-server"],
+                "env": {
+                    "ANTHROPIC_API_KEY": {
+                        "description": "Anthropic API key",
+                        "example": "sk-ant-xxxxxxxxxxxx",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "groq": {
+        "description": "Groq fast inference",
+        "servers": {
+            "groq": {
+                "command": "npx",
+                "args": ["-y", "groq-mcp-server"],
+                "env": {
+                    "GROQ_API_KEY": {
+                        "description": "Groq API key",
+                        "example": "gsk_xxxxxxxxxxxx",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "mistral": {
+        "description": "Mistral AI",
+        "servers": {
+            "mistral": {
+                "command": "npx",
+                "args": ["-y", "mistral-mcp-server"],
+                "env": {
+                    "MISTRAL_API_KEY": {
+                        "description": "Mistral API key",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "cohere": {
+        "description": "Cohere AI",
+        "servers": {
+            "cohere": {
+                "command": "npx",
+                "args": ["-y", "cohere-mcp-server"],
+                "env": {
+                    "COHERE_API_KEY": {
+                        "description": "Cohere API key",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "replicate": {
+        "description": "Replicate ML models",
+        "servers": {
+            "replicate": {
+                "command": "npx",
+                "args": ["-y", "replicate-mcp-server"],
+                "env": {
+                    "REPLICATE_API_TOKEN": {
+                        "description": "Replicate API token",
+                        "example": "r8_xxxxxxxxxxxx",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "huggingface": {
+        "description": "Hugging Face models",
+        "servers": {
+            "huggingface": {
+                "command": "npx",
+                "args": ["-y", "huggingface-mcp-server"],
+                "env": {
+                    "HUGGINGFACE_TOKEN": {
+                        "description": "Hugging Face access token",
+                        "example": "hf_xxxxxxxxxxxx",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "together": {
+        "description": "Together AI inference",
+        "servers": {
+            "together": {
+                "command": "npx",
+                "args": ["-y", "together-mcp-server"],
+                "env": {
+                    "TOGETHER_API_KEY": {
+                        "description": "Together AI API key",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "perplexity": {
+        "description": "Perplexity AI search",
+        "servers": {
+            "perplexity": {
+                "command": "npx",
+                "args": ["-y", "perplexity-mcp-server"],
+                "env": {
+                    "PERPLEXITY_API_KEY": {
+                        "description": "Perplexity API key",
+                        "example": "pplx-xxxxxxxxxxxx",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # AI Search & Scraping
+    "tavily": {
+        "description": "Tavily AI search",
+        "servers": {
+            "tavily": {
+                "command": "npx",
+                "args": ["-y", "tavily-mcp-server"],
+                "env": {
+                    "TAVILY_API_KEY": {
+                        "description": "Tavily API key",
+                        "example": "tvly-xxxxxxxxxxxx",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "exa": {
+        "description": "Exa AI search",
+        "servers": {
+            "exa": {
+                "command": "npx",
+                "args": ["-y", "@anthropics/exa-mcp-server"],
+                "env": {
+                    "EXA_API_KEY": {
+                        "description": "Exa API key",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "serper": {
+        "description": "Serper Google search API",
+        "servers": {
+            "serper": {
+                "command": "npx",
+                "args": ["-y", "serper-mcp-server"],
+                "env": {
+                    "SERPER_API_KEY": {
+                        "description": "Serper API key",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "firecrawl": {
+        "description": "Firecrawl web scraping",
+        "servers": {
+            "firecrawl": {
+                "command": "npx",
+                "args": ["-y", "firecrawl-mcp-server"],
+                "env": {
+                    "FIRECRAWL_API_KEY": {
+                        "description": "Firecrawl API key",
+                        "example": "fc-xxxxxxxxxxxx",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "browserbase": {
+        "description": "Browserbase cloud browsers",
+        "servers": {
+            "browserbase": {
+                "command": "npx",
+                "args": ["-y", "@anthropics/browserbase-mcp-server"],
+                "env": {
+                    "BROWSERBASE_API_KEY": {
+                        "description": "Browserbase API key",
+                        "example": "",
+                        "required": True,
+                    },
+                    "BROWSERBASE_PROJECT_ID": {
+                        "description": "Browserbase project ID",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "apify": {
+        "description": "Apify web scraping & automation",
+        "servers": {
+            "apify": {
+                "command": "npx",
+                "args": ["-y", "apify-mcp-server"],
+                "env": {
+                    "APIFY_TOKEN": {
+                        "description": "Apify API token",
+                        "example": "apify_api_xxxxxxxxxxxx",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # Code Execution
+    "e2b": {
+        "description": "E2B code sandbox",
+        "servers": {
+            "e2b": {
+                "command": "npx",
+                "args": ["-y", "e2b-mcp-server"],
+                "env": {
+                    "E2B_API_KEY": {
+                        "description": "E2B API key",
+                        "example": "e2b_xxxxxxxxxxxx",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "modal": {
+        "description": "Modal serverless compute",
+        "servers": {
+            "modal": {
+                "command": "npx",
+                "args": ["-y", "modal-mcp-server"],
+                "env": {
+                    "MODAL_TOKEN_ID": {
+                        "description": "Modal token ID",
+                        "example": "",
+                        "required": True,
+                    },
+                    "MODAL_TOKEN_SECRET": {
+                        "description": "Modal token secret",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # Data Warehouses
+    "snowflake": {
+        "description": "Snowflake data warehouse",
+        "servers": {
+            "snowflake": {
+                "command": "npx",
+                "args": ["-y", "snowflake-mcp-server"],
+                "env": {
+                    "SNOWFLAKE_ACCOUNT": {
+                        "description": "Snowflake account identifier",
+                        "example": "abc12345.us-east-1",
+                        "required": True,
+                    },
+                    "SNOWFLAKE_USER": {
+                        "description": "Snowflake username",
+                        "example": "",
+                        "required": True,
+                    },
+                    "SNOWFLAKE_PASSWORD": {
+                        "description": "Snowflake password",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "bigquery": {
+        "description": "Google BigQuery",
+        "servers": {
+            "bigquery": {
+                "command": "npx",
+                "args": ["-y", "bigquery-mcp-server"],
+                "env": {
+                    "GOOGLE_PROJECT_ID": {
+                        "description": "Google Cloud project ID",
+                        "example": "",
+                        "required": True,
+                    },
+                    "GOOGLE_APPLICATION_CREDENTIALS": {
+                        "description": "Path to service account JSON",
+                        "example": "/path/to/credentials.json",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "databricks": {
+        "description": "Databricks data platform",
+        "servers": {
+            "databricks": {
+                "command": "npx",
+                "args": ["-y", "databricks-mcp-server"],
+                "env": {
+                    "DATABRICKS_HOST": {
+                        "description": "Databricks workspace URL",
+                        "example": "https://xxx.cloud.databricks.com",
+                        "required": True,
+                    },
+                    "DATABRICKS_TOKEN": {
+                        "description": "Databricks access token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # CI/CD
+    "circleci": {
+        "description": "CircleCI pipelines",
+        "servers": {
+            "circleci": {
+                "command": "npx",
+                "args": ["-y", "circleci-mcp-server"],
+                "env": {
+                    "CIRCLECI_TOKEN": {
+                        "description": "CircleCI personal API token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "buildkite": {
+        "description": "Buildkite CI/CD",
+        "servers": {
+            "buildkite": {
+                "command": "npx",
+                "args": ["-y", "buildkite-mcp-server"],
+                "env": {
+                    "BUILDKITE_TOKEN": {
+                        "description": "Buildkite API token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # Infrastructure as Code
+    "terraform": {
+        "description": "Terraform infrastructure",
+        "servers": {
+            "terraform": {
+                "command": "npx",
+                "args": ["-y", "terraform-mcp-server"],
+                "env": {
+                    "TF_CLOUD_TOKEN": {
+                        "description": "Terraform Cloud token (optional)",
+                        "example": "",
+                        "required": False,
+                    },
+                },
+            }
+        },
+    },
+    "pulumi": {
+        "description": "Pulumi infrastructure",
+        "servers": {
+            "pulumi": {
+                "command": "npx",
+                "args": ["-y", "pulumi-mcp-server"],
+                "env": {
+                    "PULUMI_ACCESS_TOKEN": {
+                        "description": "Pulumi access token",
+                        "example": "pul-xxxxxxxxxxxx",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # Secrets Management
+    "vault": {
+        "description": "HashiCorp Vault secrets",
+        "servers": {
+            "vault": {
+                "command": "npx",
+                "args": ["-y", "vault-mcp-server"],
+                "env": {
+                    "VAULT_ADDR": {
+                        "description": "Vault server address",
+                        "example": "http://localhost:8200",
+                        "required": True,
+                    },
+                    "VAULT_TOKEN": {
+                        "description": "Vault token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "doppler": {
+        "description": "Doppler secrets management",
+        "servers": {
+            "doppler": {
+                "command": "npx",
+                "args": ["-y", "doppler-mcp-server"],
+                "env": {
+                    "DOPPLER_TOKEN": {
+                        "description": "Doppler service token",
+                        "example": "dp.st.xxxxxxxxxxxx",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # Spreadsheets & Databases
+    "airtable": {
+        "description": "Airtable spreadsheet database",
+        "servers": {
+            "airtable": {
+                "command": "npx",
+                "args": ["-y", "airtable-mcp-server"],
+                "env": {
+                    "AIRTABLE_API_KEY": {
+                        "description": "Airtable API key or personal access token",
+                        "example": "pat.xxxxxxxxxxxx",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "google-sheets": {
+        "description": "Google Sheets",
+        "servers": {
+            "google-sheets": {
+                "command": "npx",
+                "args": ["-y", "google-sheets-mcp-server"],
+                "env": {
+                    "GOOGLE_SERVICE_ACCOUNT": {
+                        "description": "Google service account JSON (base64)",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # Calendar
+    "google-calendar": {
+        "description": "Google Calendar",
+        "servers": {
+            "google-calendar": {
+                "command": "npx",
+                "args": ["-y", "google-calendar-mcp-server"],
+                "env": {
+                    "GOOGLE_CALENDAR_CREDENTIALS": {
+                        "description": "Google OAuth credentials JSON",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # CRM
+    "hubspot": {
+        "description": "HubSpot CRM",
+        "servers": {
+            "hubspot": {
+                "command": "npx",
+                "args": ["-y", "hubspot-mcp-server"],
+                "env": {
+                    "HUBSPOT_ACCESS_TOKEN": {
+                        "description": "HubSpot private app access token",
+                        "example": "pat-xxxxxxxxxxxx",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "salesforce": {
+        "description": "Salesforce CRM",
+        "servers": {
+            "salesforce": {
+                "command": "npx",
+                "args": ["-y", "salesforce-mcp-server"],
+                "env": {
+                    "SALESFORCE_INSTANCE_URL": {
+                        "description": "Salesforce instance URL",
+                        "example": "https://mycompany.salesforce.com",
+                        "required": True,
+                    },
+                    "SALESFORCE_ACCESS_TOKEN": {
+                        "description": "Salesforce access token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # Documentation
+    "confluence": {
+        "description": "Atlassian Confluence",
+        "servers": {
+            "confluence": {
+                "command": "npx",
+                "args": ["-y", "confluence-mcp-server"],
+                "env": {
+                    "CONFLUENCE_URL": {
+                        "description": "Confluence instance URL",
+                        "example": "https://mycompany.atlassian.net/wiki",
+                        "required": True,
+                    },
+                    "CONFLUENCE_EMAIL": {
+                        "description": "Confluence account email",
+                        "example": "user@example.com",
+                        "required": True,
+                    },
+                    "CONFLUENCE_API_TOKEN": {
+                        "description": "Confluence API token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # Git Hosting
+    "bitbucket": {
+        "description": "Bitbucket repositories",
+        "servers": {
+            "bitbucket": {
+                "command": "npx",
+                "args": ["-y", "bitbucket-mcp-server"],
+                "env": {
+                    "BITBUCKET_USERNAME": {
+                        "description": "Bitbucket username",
+                        "example": "",
+                        "required": True,
+                    },
+                    "BITBUCKET_APP_PASSWORD": {
+                        "description": "Bitbucket app password",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # Azure
+    "azure": {
+        "description": "Microsoft Azure",
+        "servers": {
+            "azure": {
+                "command": "npx",
+                "args": ["-y", "azure-mcp-server"],
+                "env": {
+                    "AZURE_SUBSCRIPTION_ID": {
+                        "description": "Azure subscription ID",
+                        "example": "",
+                        "required": True,
+                    },
+                    "AZURE_TENANT_ID": {
+                        "description": "Azure tenant ID",
+                        "example": "",
+                        "required": True,
+                    },
+                    "AZURE_CLIENT_ID": {
+                        "description": "Azure client/app ID",
+                        "example": "",
+                        "required": True,
+                    },
+                    "AZURE_CLIENT_SECRET": {
+                        "description": "Azure client secret",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # Storage
+    "dropbox": {
+        "description": "Dropbox storage",
+        "servers": {
+            "dropbox": {
+                "command": "npx",
+                "args": ["-y", "dropbox-mcp-server"],
+                "env": {
+                    "DROPBOX_ACCESS_TOKEN": {
+                        "description": "Dropbox access token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # Message Queues
+    "rabbitmq": {
+        "description": "RabbitMQ message broker",
+        "servers": {
+            "rabbitmq": {
+                "command": "npx",
+                "args": ["-y", "rabbitmq-mcp-server"],
+                "env": {
+                    "RABBITMQ_URL": {
+                        "description": "RabbitMQ connection URL",
+                        "example": "amqp://guest:guest@localhost:5672",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "kafka": {
+        "description": "Apache Kafka streaming",
+        "servers": {
+            "kafka": {
+                "command": "npx",
+                "args": ["-y", "kafka-mcp-server"],
+                "env": {
+                    "KAFKA_BROKERS": {
+                        "description": "Kafka broker addresses",
+                        "example": "localhost:9092",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # Graph Databases
+    "neo4j": {
+        "description": "Neo4j graph database",
+        "servers": {
+            "neo4j": {
+                "command": "npx",
+                "args": ["-y", "neo4j-mcp-server"],
+                "env": {
+                    "NEO4J_URI": {
+                        "description": "Neo4j connection URI",
+                        "example": "bolt://localhost:7687",
+                        "required": True,
+                    },
+                    "NEO4J_USER": {
+                        "description": "Neo4j username",
+                        "example": "neo4j",
+                        "required": True,
+                    },
+                    "NEO4J_PASSWORD": {
+                        "description": "Neo4j password",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # Automation & Integration
+    "zapier": {
+        "description": "Zapier automation",
+        "servers": {
+            "zapier": {
+                "command": "npx",
+                "args": ["-y", "zapier-mcp-server"],
+                "env": {
+                    "ZAPIER_NLA_API_KEY": {
+                        "description": "Zapier NLA API key",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    "make": {
+        "description": "Make (Integromat) automation",
+        "servers": {
+            "make": {
+                "command": "npx",
+                "args": ["-y", "make-mcp-server"],
+                "env": {
+                    "MAKE_API_TOKEN": {
+                        "description": "Make API token",
+                        "example": "",
+                        "required": True,
+                    },
+                },
+            }
+        },
+    },
+    # Sequential Thinking (MCP official)
+    "sequential-thinking": {
+        "description": "Sequential thinking for complex reasoning",
+        "servers": {
+            "sequential-thinking": {
+                "command": "npx",
+                "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+                "env": {},
+            }
+        },
+    },
+    # Everything (Windows file search)
+    "everything": {
+        "description": "Everything file search (Windows)",
+        "servers": {
+            "everything": {
+                "command": "npx",
+                "args": ["-y", "@anthropics/everything-mcp-server"],
+                "env": {},
+            }
+        },
+    },
+    # Git
+    "git": {
+        "description": "Git repository operations",
+        "servers": {
+            "git": {
+                "command": "npx",
+                "args": ["-y", "@modelcontextprotocol/server-git"],
+                "env": {},
+            }
+        },
+    },
 }
 
 # Common tech stack presets
 STACK_PRESETS = {
     "web-basic": {
-        "description": "Basic web development (fetch, memory, github)",
-        "stacks": ["fetch", "memory", "github"],
+        "description": "Basic web development",
+        "stacks": ["fetch", "memory", "github", "git"],
     },
     "fullstack-postgres": {
         "description": "Full-stack with PostgreSQL",
-        "stacks": ["fetch", "memory", "github", "postgres", "docker"],
+        "stacks": ["fetch", "memory", "github", "postgres", "docker", "git"],
     },
     "fullstack-mongo": {
         "description": "Full-stack with MongoDB",
-        "stacks": ["fetch", "memory", "github", "mongodb", "docker"],
+        "stacks": ["fetch", "memory", "github", "mongodb", "docker", "git"],
+    },
+    "fullstack-supabase": {
+        "description": "Full-stack with Supabase",
+        "stacks": ["fetch", "memory", "github", "supabase", "git"],
+    },
+    "serverless": {
+        "description": "Serverless stack (Vercel, Neon, Upstash)",
+        "stacks": ["fetch", "memory", "github", "vercel", "neon", "upstash", "git"],
     },
     "data-science": {
         "description": "Data science workflow",
-        "stacks": ["memory", "postgres", "s3", "qdrant"],
+        "stacks": ["memory", "postgres", "s3", "qdrant", "bigquery"],
     },
     "devops": {
         "description": "DevOps and infrastructure",
-        "stacks": ["github", "docker", "kubernetes", "aws", "sentry"],
+        "stacks": ["github", "docker", "kubernetes", "aws", "sentry", "terraform"],
     },
     "ai-agent": {
         "description": "AI agent development",
-        "stacks": ["memory", "fetch", "openai", "qdrant", "github"],
+        "stacks": ["memory", "fetch", "openai", "qdrant", "github", "e2b", "firecrawl"],
+    },
+    "ai-search": {
+        "description": "AI-powered search applications",
+        "stacks": ["memory", "fetch", "tavily", "exa", "qdrant", "openai"],
+    },
+    "saas": {
+        "description": "SaaS application stack",
+        "stacks": ["github", "supabase", "stripe", "resend", "posthog", "sentry"],
+    },
+    "startup": {
+        "description": "Startup essentials",
+        "stacks": ["github", "vercel", "supabase", "stripe", "resend", "slack", "linear"],
+    },
+    "enterprise": {
+        "description": "Enterprise integrations",
+        "stacks": ["github", "jira", "confluence", "slack", "datadog", "vault"],
+    },
+    "ecommerce": {
+        "description": "E-commerce stack",
+        "stacks": ["github", "shopify", "stripe", "sendgrid", "algolia", "segment"],
+    },
+    "marketing": {
+        "description": "Marketing & analytics",
+        "stacks": ["hubspot", "segment", "mixpanel", "posthog", "mailgun", "slack"],
+    },
+    "ml-ops": {
+        "description": "ML operations pipeline",
+        "stacks": ["github", "aws", "s3", "snowflake", "databricks", "huggingface"],
     },
 }
 
